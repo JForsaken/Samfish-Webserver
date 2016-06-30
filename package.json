@@ -1,7 +1,7 @@
 {
-  "name": "tutor-backend",
+  "name": "Samfish-Webserver",
   "version": "1.0.0",
-  "description": "Backend API for Webflix project.",
+  "description": "Samfish backend RESTful API.",
   "main": "server.js",
   "scripts": {
     "start": "node --harmony --harmony_destructuring --use_strict server.js",
