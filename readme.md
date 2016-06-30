@@ -1,4 +1,4 @@
-# Samfiche Webserver:tropical_fish:
+# Samfish Webserver :tropical_fish:
 
 The RESTful backend API for **_Années-lumière_**.
 
@@ -14,7 +14,7 @@ The RESTful backend API for **_Années-lumière_**.
 ## Contributing
 
 1. Fork it :fork_and_knife:
-2. Clone it  :two_men_holding_hands: `git clone https://github.com/devname/Samfiche-Webserver.git`
+2. Clone it  :two_men_holding_hands: `git clone https://github.com/devname/Samfish-Webserver.git`
 3. Create your feature branch: `git checkout -b my-new-feature`
 4. Commit your changes: `git commit -am 'Add some feature'`
 5. Push to the branch: `git push origin my-new-feature`
