@@ -1,5 +1,5 @@
 module.exports = function(app) {
-  const clients = require('./app/controllers/clients');
+  const reservations = require('./app/controllers/reservations');
 
-  app.get('/clients', clients.findAll);
+  app.get('/reservations', reservations.findAll);
 }
