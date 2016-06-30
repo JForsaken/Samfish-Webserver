@@ -1,4 +1,4 @@
-# Samfiche Webserver
+# Samfiche Webserver :tropical_fish: 😍
 
 The RESTful backend API for **_Années-lumière_**.
 
