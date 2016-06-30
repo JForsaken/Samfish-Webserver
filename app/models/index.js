@@ -4,7 +4,7 @@ const DataTypes = require('sequelize');
 const sequelize = new DataTypes(CONNECTION_STRING);
 
 /* Utils */
-const { forOwn } =require('lodash');
+const { forOwn } = require('lodash');
 
 // Database context
 const db = {};
@@ -17,7 +17,7 @@ db.MODELS = {
 };
 
 // Import every models
-forOwn(db.MODELS, (value, key) => {
+forOwn(db.MODELS, value => {
   db[value] = sequelize.import(`./${value}.js`);
 });
 
@@ -26,8 +26,8 @@ db.DataTypes = DataTypes;
 db.sequelize = sequelize;
 
 // -- Associations --
-db.Reservations.hasMany(db.Kids, { foreignKey: 'reservationId' });
-db.Reservations.hasOne(db.Languages, { foreignKey: 'languageId' });
-db.Kids.hasOne(db.Languages, { foreignKey: 'languageId' });
+db.Reservations.hasMany(db.Kids);
+db.Kids.belongsTo(db.Languages);
+db.Reservations.belongsTo(db.Languages);
 
 module.exports = db;

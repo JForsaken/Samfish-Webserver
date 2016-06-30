@@ -3,11 +3,7 @@ const debug = require('debug')('Kids table');
 
 module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-names
   // create clients model
-  const Kids = sequelize.define('kids', {
-    kidId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-    },
+  const Kids = sequelize.define('kid', {
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -32,7 +28,7 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
     freezeTableName: true, // Model tableName will be the same as the model name
   });
 
-  Kids.sync({ force: true }).then(() => {
+  Kids.sync().then(() => {
     debug('synced');
   }).catch(() => {
     debug('failed sync');

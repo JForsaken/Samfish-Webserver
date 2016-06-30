@@ -4,8 +4,14 @@ const bodyParser = require('body-parser');
 const app = express();
 
 /* CONFIGS */
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb'}));
+app.use(bodyParser.json({
+  limit: '50mb',
+}));
+
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '50mb',
+}));
 
 app.set('port', (process.env.PORT || 5000));
 

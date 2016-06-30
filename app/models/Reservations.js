@@ -4,10 +4,6 @@ const debug = require('debug')('Reservations table');
 module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-names
   // create clients model
   const Reservations = sequelize.define('reservation', {
-    reservationId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-    },
     firstname: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -28,7 +24,7 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
     freezeTableName: true, // Model tableName will be the same as the model name
   });
 
-  Reservations.sync({ force: true }).then(() => {
+  Reservations.sync().then(() => {
     debug('synced');
   }).catch(() => {
     debug('failed sync');

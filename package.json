@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node --harmony --harmony_destructuring --use_strict server.js",
-    "dev": "DEBUG=* nodemon --harmony --harmony_destructuring --use_strict server.js & npm run watch",
+    "dev": "DEBUG=*,-express:*,-nodemon* nodemon --harmony --harmony_destructuring --use_strict server.js & npm run watch",
     "watch": "gulp"
   },
   "author": "Justin D'Errico <justin@justsquad.com>",
