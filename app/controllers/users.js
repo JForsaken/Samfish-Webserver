@@ -44,7 +44,7 @@ exports.login = (req, res) => {
       if (!result) {
         res.status(404).send(`Could not find any user with the parameters '${JSON.stringify(query)}'`);
       }
-      if (db.Users.validatePassword(loginAttempt.password, result.password)){
+      if (db.Users.validatePassword(loginAttempt.password, result.password)) {
         const verifiedUser = {
           firstname: result.firstname,
           lastname: result.lastname,
