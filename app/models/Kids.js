@@ -2,7 +2,6 @@
 const debug = require('debug')('Kids table');
 
 module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-names
-  // create clients model
   const Kids = sequelize.define('kid', {
     firstname: {
       type: DataTypes.STRING,
@@ -12,8 +11,8 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
       type: DataTypes.STRING,
       allowNull: false,
     },
-    age: {
-      type: DataTypes.INTEGER,
+    birthday: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     languageId: {
@@ -24,8 +23,6 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  }, {
-    freezeTableName: true, // Model tableName will be the same as the model name
   });
 
   Kids.sync().then(() => {

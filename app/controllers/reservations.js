@@ -20,13 +20,10 @@ exports.findAll = (req, res) => {
 };
 
 exports.add = (req, res) => {
+  const newReservation = cloneDeep(req.body);
   const kids = req.body.kids;
-  const newReservation = {
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    emailAddress: req.body.lastname,
-    languageId: req.body.languageId,
-  };
+
+ delete newReservation.kids;
 
   if (!isEmpty(kids)) {
     db.Reservations.build(newReservation).save()

@@ -34,6 +34,9 @@ exports.getFormattedUrlQuery = query => {
         case db.MODELS.KIDS.toLowerCase():
           sequelizeModel = db.Kids;
           break;
+        case db.MODELS.USERS.toLowerCase():
+          sequelizeModel = db.Users;
+          break;
         default:
           break;
       }

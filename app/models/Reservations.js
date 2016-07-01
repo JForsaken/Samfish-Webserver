@@ -2,7 +2,6 @@
 const debug = require('debug')('Reservations table');
 
 module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-names
-  // create clients model
   const Reservations = sequelize.define('reservation', {
     firstname: {
       type: DataTypes.STRING,
@@ -12,16 +11,35 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
       type: DataTypes.STRING,
       allowNull: false,
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     emailAddress: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    primaryPhoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    optionalPhoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    profession: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    replied: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     languageId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  }, {
-    freezeTableName: true, // Model tableName will be the same as the model name
   });
 
   Reservations.sync().then(() => {

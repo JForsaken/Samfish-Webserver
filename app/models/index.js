@@ -14,6 +14,7 @@ db.MODELS = {
   RESERVATIONS: 'Reservations',
   KIDS: 'Kids',
   LANGUAGES: 'Languages',
+  USERS: 'Users',
 };
 
 // Import every models
