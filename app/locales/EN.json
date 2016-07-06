@@ -1,8 +1,25 @@
 {
   "messages": {
     "app": {
-      "title": "Années-Lumière",
-      "description": "Nursery"
+      "title": "Années-Lumière"
+    },
+    "email": {
+      "header": "Your reservation has been successfully received! Here is your reservation information",
+      "reservationInfo": "Information of the person in charge",
+      "subject": "Your reservation is now under way",
+      "firstname": "First name",
+      "lastname": "Last name",
+      "address": "Address",
+      "primaryPhoneNumber": "Primary phone number",
+      "optionalPhoneNumber": "Optional phone number",
+      "profession": "Profession",
+      "kids": {
+        "header": "Children information",
+        "firstname": "First name",
+        "lastname": "Last name",
+        "birthday": "Date of birth",
+        "language": "Prefered language"
+      }
     }
   }
 }

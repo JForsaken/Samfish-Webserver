@@ -1,1 +1,25 @@
-{"messages":{"app":{"title":"Calisse","description":"Garderie","div1":"Gros texte"}}}
+{
+  "messages": {
+    "app": {
+      "title": "Années-Lumière"
+    },
+    "email": {
+      "header": "L'inscription a été reçue avec succès! Voici vos informations d'inscription",
+      "reservationInfo": "Informations du responsable",
+      "subject": "Votre inscription est maintenant en traitement",
+      "firstname": "Prénom",
+      "lastname": "Nom",
+      "address": "Adresse",
+      "primaryPhoneNumber": "Numéro de téléphone primaire",
+      "optionalPhoneNumber": "Numéro de téléphone secondaire",
+      "profession": "Profession",
+      "kids": {
+        "header": "Enfants inscrits",
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "birthday": "Date de naissance",
+        "language": "Langue maternelle"
+      }
+    }
+  }
+}

@@ -1,8 +1,5 @@
 const db = require('../models');
 
-/* Constants */
-const { CONFIG } = require('../constants/config');
-
 /* Utils */
 const fs = require('fs');
 const { isEmpty } = require('lodash');
@@ -20,8 +17,7 @@ exports.getLocale = (req, res) => {
     .then(foundLanguage => {
       if (!isEmpty(foundLanguage)) {
         res.status(200).send(JSON.parse(fs.readFileSync(`${__dirname}/../locales/${language}.json`, 'utf8')));
-      }
-      else {
+      } else {
         res.status(404).send(`Couldn't find the language with the code '${language}'`);
       }
     });
@@ -43,9 +39,8 @@ exports.updateLocale = (req, res) => {
         fs.writeFile(`${__dirname}/../locales/${language}.json`, updatedLocale, () => {
           res.status(200).send(`Sucessfully updated the '${language}' locale`);
         });
-      }
-      else {
+      } else {
         res.status(404).send(`Couldn't find the language with the code '${language}'`);
       }
     });
-}
+};

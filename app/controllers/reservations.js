@@ -2,7 +2,45 @@ const db = require('../models');
 
 /* Utils */
 const queryHelper = require('./helpers/queries');
-const { cloneDeep, forEach, isEmpty } = require('lodash');
+const nodemailer = require('nodemailer');
+const fs = require('fs');
+const { cloneDeep, forEach, isEmpty, omit } = require('lodash');
+
+const sendEmail = (reservation, kids) => {
+  const currentLocale = JSON.parse(fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8'));
+  const transporter = nodemailer.createTransport('smtps://justin.derrico1991%40gmail.com:justin91!@smtp.gmail.com');
+  let htmlBody = `<h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
+
+  // reservation info
+  const formattedReservation = omit(reservation,['language', 'emailAddress']);
+  forEach(formattedReservation, (value, key) => {
+    if (value) {
+      htmlBody += `<li>${currentLocale.messages.email[key]}: ${value}</li>`;
+    }
+  });
+
+  // kids info
+  htmlBody += `</ul><br /><h3>${currentLocale.messages.email.kids.header}</h3><ol>`;
+  forEach(kids, kid => {
+    htmlBody += `<li>${kid.firstname} ${kid.lastname} (${kid.birthday})</li>`;
+  });
+  htmlBody += '</ol>'
+
+  const mailOptions = {
+    from: '"Années-Lumière" <info@annees-lumiere.com>',
+    to: reservation.emailAddress,
+    subject: `${currentLocale.messages.email.subject}, ${formattedReservation.firstname}!`,
+    html: htmlBody,
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    return console.log(`Message sent: ${info.response}`);
+  });
+};
 
 exports.findAll = (req, res) => {
   const query = queryHelper.getFormattedUrlQuery(req.query);
@@ -48,18 +86,17 @@ exports.add = (req, res) => {
                       const currentKid = cloneDeep(kid);
                       currentKid.reservationId = savedReservation.id;
                       db.Kids.build(currentKid).save();
-                    }
-                    else {
+                    } else {
                       savedReservation.destroy();
                       res.status(404).send(`Couldn't find the language with the code '${newReservation.language}' for one kid`);
                     }
                   });
               });
-
-              res.send(`Successfully added the language: ${JSON.stringify(req.body)}`);
+              sendEmail(newReservation, kids);
+              res.status(200).send(`Successfully added the language: ${JSON.stringify(req.body)}`);
             })
             .catch(err => {
-              res.status(400).send(`Could not add the language: ${err}`);
+              res.status(400).send(`Could not add the reservation: ${err}`);
             });
         } else {
           res.status(404).send(`Couldn't find the language with the code '${newReservation.language}'`);

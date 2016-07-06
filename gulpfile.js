@@ -8,7 +8,7 @@ gulp.task('lint', function(done) {
   var eslint = require('gulp-eslint');
 
   return gulp
-    .src(['./app/**/*.js', './server.js', './app/**/*.json'])
+    .src(['./app/**/*.js', './server.js', '!./app/**/*.json'])
     .pipe(eslint())
     .pipe(eslint.format());
   // patterns with the same form as gulp.src(patterns)
