@@ -15,8 +15,8 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    languageId: {
-      type: DataTypes.INTEGER,
+    language: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     reservationId: {

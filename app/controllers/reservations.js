@@ -22,22 +22,49 @@ exports.findAll = (req, res) => {
 exports.add = (req, res) => {
   const newReservation = cloneDeep(req.body);
   const kids = req.body.kids;
+  const reservationLanguageQuery = {
+    where: {
+      code: newReservation.language,
+    },
+  };
 
   delete newReservation.kids;
 
   if (!isEmpty(kids)) {
-    db.Reservations.build(newReservation).save()
-      .then(savedReservation => {
-        forEach(kids, kid => {
-          const currentKid = cloneDeep(kid);
-          currentKid.reservationId = savedReservation.id;
-          db.Kids.build(currentKid).save();
-        });
+    db.Languages.findOne(reservationLanguageQuery)
+      .then(reservationLanguage => {
+        if (!isEmpty(reservationLanguage)) {
+          db.Reservations.build(newReservation).save()
+            .then(savedReservation => {
+              forEach(kids, kid => {
+                const kidLanguageQuery = {
+                  where: {
+                    code: kid.language,
+                  },
+                };
 
-        res.send(`Successfully added the language: ${JSON.stringify(req.body)}`);
-      })
-      .catch(err => {
-        res.status(400).send(`Could not add the language: ${err}`);
+                db.Languages.findOne(kidLanguageQuery)
+                  .then(kidLanguage => {
+                    if (!isEmpty(kidLanguage)) {
+                      const currentKid = cloneDeep(kid);
+                      currentKid.reservationId = savedReservation.id;
+                      db.Kids.build(currentKid).save();
+                    }
+                    else {
+                      savedReservation.destroy();
+                      res.status(404).send(`Couldn't find the language with the code '${newReservation.language}' for one kid`);
+                    }
+                  });
+              });
+
+              res.send(`Successfully added the language: ${JSON.stringify(req.body)}`);
+            })
+            .catch(err => {
+              res.status(400).send(`Could not add the language: ${err}`);
+            });
+        } else {
+          res.status(404).send(`Couldn't find the language with the code '${newReservation.language}'`);
+        }
       });
   }
 };

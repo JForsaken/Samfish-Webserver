@@ -28,7 +28,5 @@ db.sequelize = sequelize;
 
 // -- Associations --
 db.Reservations.hasMany(db.Kids);
-db.Kids.belongsTo(db.Languages);
-db.Reservations.belongsTo(db.Languages);
 
 module.exports = db;
