@@ -1,12 +1,11 @@
 const db = require('../models');
-const debug = require('debug')('reservations controller');
+
 /* Utils */
 const queryHelper = require('./helpers/queries');
 const { cloneDeep, forEach, isEmpty } = require('lodash');
 
 exports.findAll = (req, res) => {
   const query = queryHelper.getFormattedUrlQuery(req.query);
-  debug(query);
   db.Reservations.findAll(query)
     .then(result => {
       if (!result.length) {
