@@ -5,6 +5,7 @@ const queryHelper = require('./helpers/queries');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const { cloneDeep, forEach, isEmpty, omit } = require('lodash');
+const debug = require('debug')('Reservation controller');
 
 const sendEmail = (reservation, kids) => {
   const currentLocale = JSON.parse(fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8'));
@@ -12,7 +13,7 @@ const sendEmail = (reservation, kids) => {
   let htmlBody = `<h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
 
   // reservation info
-  const formattedReservation = omit(reservation,['language', 'emailAddress']);
+  const formattedReservation = omit(reservation, ['language', 'emailAddress']);
   forEach(formattedReservation, (value, key) => {
     if (value) {
       htmlBody += `<li>${currentLocale.messages.email[key]}: ${value}</li>`;
@@ -24,7 +25,7 @@ const sendEmail = (reservation, kids) => {
   forEach(kids, kid => {
     htmlBody += `<li>${kid.firstname} ${kid.lastname} (${kid.birthday})</li>`;
   });
-  htmlBody += '</ol>'
+  htmlBody += '</ol>';
 
   const mailOptions = {
     from: '"Années-Lumière" <info@annees-lumiere.com>',
@@ -36,9 +37,9 @@ const sendEmail = (reservation, kids) => {
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      return console.log(error);
+      debug(error);
     }
-    return console.log(`Message sent: ${info.response}`);
+    debug(`Message sent: ${info.response}`);
   });
 };
 
@@ -93,7 +94,7 @@ exports.add = (req, res) => {
                   });
               });
               sendEmail(newReservation, kids);
-              res.status(200).send(`Successfully added the language: ${JSON.stringify(req.body)}`);
+              res.status(200).send(req.body);
             })
             .catch(err => {
               res.status(400).send(`Could not add the reservation: ${err}`);
