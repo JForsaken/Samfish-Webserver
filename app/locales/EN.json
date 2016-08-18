@@ -18,7 +18,8 @@
         "firstname": "First name",
         "lastname": "Last name",
         "birthday": "Date of birth",
-        "language": "Prefered language"
+        "language": "Prefered language",
+        "sex": "Gender"
       }
     }
   }

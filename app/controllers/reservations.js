@@ -23,7 +23,7 @@ const sendEmail = (reservation, kids) => {
   // kids info
   htmlBody += `</ul><br /><h3>${currentLocale.messages.email.kids.header}</h3><ol>`;
   forEach(kids, kid => {
-    htmlBody += `<li>${kid.firstname} ${kid.lastname} (${kid.birthday})</li>`;
+    htmlBody += `<li>${kid.firstname} ${kid.lastname} (${kid.birthday}) (${kid.sex})</li>`;
   });
   htmlBody += '</ol>';
 
@@ -60,48 +60,22 @@ exports.findAll = (req, res) => {
 exports.add = (req, res) => {
   const newReservation = cloneDeep(req.body);
   const kids = req.body.kids;
-  const reservationLanguageQuery = {
-    where: {
-      code: newReservation.language,
-    },
-  };
 
   delete newReservation.kids;
 
   if (!isEmpty(kids)) {
-    db.Languages.findOne(reservationLanguageQuery)
-      .then(reservationLanguage => {
-        if (!isEmpty(reservationLanguage)) {
-          db.Reservations.build(newReservation).save()
-            .then(savedReservation => {
-              forEach(kids, kid => {
-                const kidLanguageQuery = {
-                  where: {
-                    code: kid.language,
-                  },
-                };
-
-                db.Languages.findOne(kidLanguageQuery)
-                  .then(kidLanguage => {
-                    if (!isEmpty(kidLanguage)) {
-                      const currentKid = cloneDeep(kid);
-                      currentKid.reservationId = savedReservation.id;
-                      db.Kids.build(currentKid).save();
-                    } else {
-                      savedReservation.destroy();
-                      res.status(404).send(`Couldn't find the language with the code '${newReservation.language}' for one kid`);
-                    }
-                  });
-              });
-              sendEmail(newReservation, kids);
-              res.status(200).send(req.body);
-            })
-            .catch(err => {
-              res.status(400).send(`Could not add the reservation: ${err}`);
-            });
-        } else {
-          res.status(404).send(`Couldn't find the language with the code '${newReservation.language}'`);
-        }
+    db.Reservations.build(newReservation).save()
+      .then(savedReservation => {
+        forEach(kids, kid => {
+          const currentKid = cloneDeep(kid);
+          currentKid.reservationId = savedReservation.id;
+          db.Kids.build(currentKid).save();
+        });
+        sendEmail(newReservation, kids);
+        res.status(200).send(req.body);
+      })
+      .catch(err => {
+        res.status(400).send(`Could not add the reservation: ${err}`);
       });
   }
 };

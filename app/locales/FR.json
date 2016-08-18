@@ -18,7 +18,8 @@
         "firstname": "Prénom",
         "lastname": "Nom",
         "birthday": "Date de naissance",
-        "language": "Langue maternelle"
+        "language": "Langue maternelle",
+        "sex": "Genre"
       }
     }
   }
