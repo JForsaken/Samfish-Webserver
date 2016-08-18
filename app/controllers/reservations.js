@@ -76,7 +76,7 @@ exports.add = (req, res) => {
               res.status(400).send(`Could not create kid: ${err}`);
             });
         });
-        if (errors) {
+        if (!errors) {
           sendEmail(newReservation, kids);
           res.status(200).send(req.body);
         }
