@@ -28,9 +28,6 @@ exports.getFormattedUrlQuery = query => {
         case db.MODELS.RESERVATIONS.toLowerCase():
           sequelizeModel = db.Reservations;
           break;
-        case db.MODELS.LANGUAGES.toLowerCase():
-          sequelizeModel = db.Languages;
-          break;
         case db.MODELS.KIDS.toLowerCase():
           sequelizeModel = db.Kids;
           break;

@@ -60,7 +60,7 @@ exports.findAll = (req, res) => {
 exports.add = (req, res) => {
   const newReservation = cloneDeep(req.body);
   const kids = req.body.kids;
-
+  let errors = false;
   delete newReservation.kids;
 
   if (!isEmpty(kids)) {
@@ -69,10 +69,17 @@ exports.add = (req, res) => {
         forEach(kids, kid => {
           const currentKid = cloneDeep(kid);
           currentKid.reservationId = savedReservation.id;
-          db.Kids.build(currentKid).save();
+          db.Kids.build(currentKid).save()
+            .catch(err => {
+              errors = true;
+              savedReservation.destroy();
+              res.status(400).send(`Could not create kid: ${err}`);
+            });
         });
-        sendEmail(newReservation, kids);
-        res.status(200).send(req.body);
+        if (errors) {
+          sendEmail(newReservation, kids);
+          res.status(200).send(req.body);
+        }
       })
       .catch(err => {
         res.status(400).send(`Could not add the reservation: ${err}`);
