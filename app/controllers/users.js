@@ -9,7 +9,7 @@ exports.findAll = (req, res) => {
   db.Users.findAll(query)
     .then(result => {
       if (!result.length) {
-        res.status(404).send(`Could not find any user with the parameters '${JSON.stringify(query)}'`);
+        res.status(400).send(`Could not find any user with the parameters '${JSON.stringify(query)}'`);
       }
       res.send(result);
     })
@@ -42,7 +42,7 @@ exports.login = (req, res) => {
   db.Users.findOne(query)
     .then(result => {
       if (!result) {
-        res.status(404).send(`Could not find any user with the parameters '${JSON.stringify(query)}'`);
+        res.status(400).send(`Could not find any user with the parameters '${JSON.stringify(query)}'`);
       }
       if (db.Users.validatePassword(loginAttempt.password, result.password)) {
         const verifiedUser = {

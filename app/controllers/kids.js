@@ -8,7 +8,7 @@ exports.findAll = (req, res) => {
   db.Kids.findAll(query)
     .then(result => {
       if (!result.length) {
-        res.status(404).send(`Could not find any kid with the parameters '${JSON.stringify(query)}'`);
+        res.status(400).send(`Could not find any kid with the parameters '${JSON.stringify(query)}'`);
       }
       res.send(result);
     })

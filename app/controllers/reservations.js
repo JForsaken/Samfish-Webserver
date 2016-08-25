@@ -48,7 +48,7 @@ exports.findAll = (req, res) => {
   db.Reservations.findAll(query)
     .then(result => {
       if (!result.length) {
-        res.status(404).send(`Could not find any reservation with the parameters '${JSON.stringify(query)}'`);
+        res.status(400).send(`Could not find any reservation with the parameters '${JSON.stringify(query)}'`);
       }
       res.send(result);
     })
@@ -97,7 +97,7 @@ exports.update = (req, res) => {
   db.Reservations.findById(id)
     .then(result => {
       if (!result) {
-        res.status(404).send(`Could not find any reservation with the id #${id}`);
+        res.status(400).send(`Could not find any reservation with the id #${id}`);
       }
 
       const userQuery = {
@@ -121,7 +121,7 @@ exports.update = (req, res) => {
           }
         })
         .catch(() => {
-          res.status(404).send(`Could not find user with username '${username}'`);
+          res.status(400).send(`Could not find user with username '${username}'`);
         });
     })
     .catch(err => {
@@ -136,7 +136,7 @@ exports.delete = (req, res) => {
   db.Reservations.findById(id)
     .then(result => {
       if (!result) {
-        res.status(404).send(`Could not find any reservation with the id #${id}`);
+        res.status(400).send(`Could not find any reservation with the id #${id}`);
       }
 
       const userQuery = {
@@ -155,7 +155,7 @@ exports.delete = (req, res) => {
           }
         })
         .catch(() => {
-          res.status(404).send(`Could not find user with username '${username}'`);
+          res.status(400).send(`Could not find user with username '${username}'`);
         });
     })
     .catch(err => {
