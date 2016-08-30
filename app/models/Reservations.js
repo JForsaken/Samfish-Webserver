@@ -36,6 +36,11 @@ module.exports = function (sequelize, DataTypes) { // eslint-disable-line func-n
       allowNull: false,
       defaultValue: false,
     },
+    hidden: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
     language: {
       type: DataTypes.STRING,
       allowNull: false,

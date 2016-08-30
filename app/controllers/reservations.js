@@ -87,7 +87,7 @@ exports.add = (req, res) => {
   }
 };
 
-exports.update = (req, res) => {
+exports.reply = (req, res) => {
   const updateAttributes = req.body;
   const { id } = req.params;
   const { username } = req.body;
@@ -150,6 +150,48 @@ exports.delete = (req, res) => {
           if (user.admin) {
             result.destroy();
             res.status(200).send(`Successfully deleted the reservation with the id #${id}`);
+          } else {
+            res.status(400).send(`User '${username}' doesn't have the required privileges`);
+          }
+        })
+        .catch(() => {
+          res.status(400).send(`Could not find user with username '${username}'`);
+        });
+    })
+    .catch(err => {
+      res.status(500).send(`Could not execute GET reservation by id query: ${err}`);
+    });
+};
+
+exports.hide = (req, res) => {
+  const updateAttributes = req.body;
+  const { id } = req.params;
+  const { username } = req.body;
+
+  delete updateAttributes.username;
+
+  db.Reservations.findById(id)
+    .then(result => {
+      if (!result) {
+        res.status(400).send(`Could not find any reservation with the id #${id}`);
+      }
+
+      const userQuery = {
+        where: {
+          username,
+        },
+      };
+
+      db.Users.findOne(userQuery)
+        .then(user => {
+          if (user.admin) {
+            result.updateAttributes(updateAttributes)
+              .then(() => {
+                res.status(200).send(`Successfully hidden the reservation with the id #${id}`);
+              })
+              .catch(err => {
+                res.status(500).send(`Could not execute PUT reservation by id query: ${err}`);
+              });
           } else {
             res.status(400).send(`User '${username}' doesn't have the required privileges`);
           }

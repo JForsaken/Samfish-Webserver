@@ -5,7 +5,8 @@ module.exports = function(app) {
 
   app.get('/reservations', reservations.findAll);
   app.post('/reservations', reservations.add);
-  app.put('/reservations/:id', reservations.update);
+  app.put('/reservations/:id', reservations.reply);
+  app.put('/reservations/hide/:id', reservations.hide);
   app.delete('/reservations/:id', reservations.delete);
 
 
