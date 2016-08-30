@@ -39,7 +39,6 @@ const sendEmail = (reservation, kids) => {
     if (error) {
       debug(error);
     }
-    debug(`Message sent: ${info.response}`);
   });
 };
 
