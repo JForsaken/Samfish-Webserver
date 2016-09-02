@@ -4,7 +4,7 @@
   "description": "Samfish backend RESTful API.",
   "main": "server.js",
   "scripts": {
-    "start": "NODE_ENV=prod node --harmony --use_strict server.js",
+    "start": "NODE_ENV=prod node --harmony --harmony_destructuring --use_strict server.js",
     "dev": "DEBUG=*,-express:*,-nodemon* NODE_ENV=dev nodemon --harmony --use_strict server.js & npm run watch",
     "watch": "gulp"
   },
