@@ -49,10 +49,8 @@ const sendEmail = (reservation, kids) => {
     },
   }, (err) => {
     if (err) {
-      console.err(err);
       debug(`Whoops! Something went wrong: ${err}`);
     } else {
-      console.err('email sent!!');
       debug(`Email sent to: ${mail.to}!`);
     }
   });
