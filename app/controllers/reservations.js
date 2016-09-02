@@ -4,7 +4,6 @@ const debug = require('debug')('Sparkpost');
 /* Utils */
 const queryHelper = require('./helpers/queries');
 const SparkPost = require('sparkpost');
-const nodemailer = require('nodemailer');
 
 const sparky = new SparkPost(); // uses process.env.SPARKPOST_API_KEY
 const fs = require('fs');
@@ -14,7 +13,7 @@ const sendEmail = (reservation, kids) => {
   const currentLocale = JSON.parse(
     fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8')
   );
-  const transporter = nodemailer.createTransport('smtps://justin.derrico1991%40gmail.com:justin91!@smtp.gmail.com');
+
   let htmlBody = `<h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
 
   // reservation info
@@ -33,40 +32,28 @@ const sendEmail = (reservation, kids) => {
   htmlBody += '</ol>';
 
   const mail = {
-    from: '"Années-Lumière" <info@annees-lumiere.com>',
+    from: 'info@annees-lumiere.com',
     to: reservation.emailAddress,
     subject: `${currentLocale.messages.email.subject}, ${formattedReservation.firstname}!`,
     html: htmlBody,
   };
 
-  if (process.env.NODE_ENV === 'dev') {
-    transporter.sendMail(mail, (error) => {
-      if (error) {
-        debug(error);
-      }
-    });
-  } else {
-    const test = {
-      transmissionBody: {
-        content: {
-          from: `testing@${process.env.SPARKPOST_SANDBOX_DOMAIN}`, // 'testing@sparkpostbox.com'
-          subject: 'Oh hey!',
-          html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>',
-        },
-        recipients: [
-          { address: 'developers@sparkpost.com' },
-        ],
+  sparky.transmissions.send({
+    transmissionBody: {
+      content: {
+        from: mail.from,
+        subject: mail.subject,
+        html: htmlBody,
       },
-    };
-
-    sparky.transmissions.send(test, (err) => {
-      if (err) {
-        debug(`Whoops! Something went wrong: ${err}`);
-      } else {
-        debug(`Email sent to: ${mail.to}!`);
-      }
-    });
-  }
+      recipients: [{ address: mail.to }],
+    },
+  }, (err) => {
+    if (err) {
+      debug(`Whoops! Something went wrong: ${err}`);
+    } else {
+      debug(`Email sent to: ${mail.to}!`);
+    }
+  });
 };
 
 exports.findAll = (req, res) => {
