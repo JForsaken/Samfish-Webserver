@@ -14,7 +14,7 @@ const sendEmail = (reservation, kids) => {
     fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8')
   );
 
-  let htmlBody = `<h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
+  let htmlBody = `<html><body><h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
 
   // reservation info
   const formattedReservation = omit(reservation, ['language', 'emailAddress']);
@@ -29,7 +29,7 @@ const sendEmail = (reservation, kids) => {
   forEach(kids, kid => {
     htmlBody += `<li>${kid.firstname} ${kid.lastname} (${kid.birthday}) (${kid.sex})</li>`;
   });
-  htmlBody += '</ol>';
+  htmlBody += '</ol></body></html>';
 
   const mail = {
     from: 'info@annees-lumiere.com',
