@@ -1,14 +1,19 @@
 const db = require('../models');
+const debug = require('debug')('Sparkpost');
 
 /* Utils */
 const queryHelper = require('./helpers/queries');
+const SparkPost = require('sparkpost');
 const nodemailer = require('nodemailer');
+
+const sparky = new SparkPost(); // uses process.env.SPARKPOST_API_KEY
 const fs = require('fs');
 const { cloneDeep, forEach, isEmpty, omit } = require('lodash');
-const debug = require('debug')('Reservation controller');
 
 const sendEmail = (reservation, kids) => {
-  const currentLocale = JSON.parse(fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8'));
+  const currentLocale = JSON.parse(
+    fs.readFileSync(`${__dirname}/../locales/${reservation.language}.json`, 'utf8')
+  );
   const transporter = nodemailer.createTransport('smtps://justin.derrico1991%40gmail.com:justin91!@smtp.gmail.com');
   let htmlBody = `<h2>${currentLocale.messages.email.header}</h2><br /><h3>${currentLocale.messages.email.reservationInfo}</h3><ul>`;
 
@@ -27,19 +32,37 @@ const sendEmail = (reservation, kids) => {
   });
   htmlBody += '</ol>';
 
-  const mailOptions = {
+  const mail = {
     from: '"Années-Lumière" <info@annees-lumiere.com>',
     to: reservation.emailAddress,
     subject: `${currentLocale.messages.email.subject}, ${formattedReservation.firstname}!`,
     html: htmlBody,
   };
 
-  // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      debug(error);
-    }
-  });
+  if (process.env.NODE_ENV === 'dev') {
+    transporter.sendMail(mail, (error) => {
+      if (error) {
+        debug(error);
+      }
+    });
+  } else {
+    sparky.transmissions.send({
+      transmissionBody: {
+        content: {
+          from: mail.from,
+          subject: mail.subject,
+          html: htmlBody,
+        },
+        recipients: [{ address: mail.to }],
+      },
+    }, (err) => {
+      if (err) {
+        debug(`Whoops! Something went wrong: ${err}`);
+      } else {
+        debug(`Email sent to: ${mail.to}!`);
+      }
+    });
+  }
 };
 
 exports.findAll = (req, res) => {
@@ -49,7 +72,7 @@ exports.findAll = (req, res) => {
       if (!result.length) {
         res.status(400).send(`Could not find any reservation with the parameters '${JSON.stringify(query)}'`);
       }
-      res.send(result);
+      res.status(200).send(result);
     })
     .catch(err => {
       res.status(500).send(`Could not execute GET reservation: ${err}`);
