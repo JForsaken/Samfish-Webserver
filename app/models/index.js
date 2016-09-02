@@ -1,6 +1,9 @@
 /* Database */
-const { CONNECTION_STRING } = require('../constants/database');
+const { LOCAL_CONNECTION_STRING } = require('../constants/database');
 const DataTypes = require('sequelize');
+
+const CONNECTION_STRING = process.env.NODE_ENV === 'dev' ?
+        LOCAL_CONNECTION_STRING : process.env.DATABASE_URL;
 const sequelize = new DataTypes(CONNECTION_STRING);
 
 /* Utils */

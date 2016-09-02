@@ -4,8 +4,8 @@
   "description": "Samfish backend RESTful API.",
   "main": "server.js",
   "scripts": {
-    "start": "node --harmony --harmony_destructuring --use_strict server.js",
-    "dev": "DEBUG=*,-express:*,-nodemon* nodemon --harmony --harmony_destructuring --use_strict server.js & npm run watch",
+    "start": "NODE_ENV=prod node --harmony --use_strict server.js",
+    "dev": "DEBUG=*,-express:*,-nodemon* NODE_ENV=dev nodemon --harmony --use_strict server.js & npm run watch",
     "watch": "gulp"
   },
   "author": "Justin D'Errico <justin@justsquad.com>",
