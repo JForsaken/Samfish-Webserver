@@ -46,16 +46,20 @@ const sendEmail = (reservation, kids) => {
       }
     });
   } else {
-    sparky.transmissions.send({
+    const test = {
       transmissionBody: {
         content: {
-          from: mail.from,
-          subject: mail.subject,
-          html: htmlBody,
+          from: `testing@${process.env.SPARKPOST_SANDBOX_DOMAIN}`, // 'testing@sparkpostbox.com'
+          subject: 'Oh hey!',
+          html: '<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>',
         },
-        recipients: [{ address: mail.to }],
+        recipients: [
+          { address: 'developers@sparkpost.com' },
+        ],
       },
-    }, (err) => {
+    };
+
+    sparky.transmissions.send(test, (err) => {
       if (err) {
         debug(`Whoops! Something went wrong: ${err}`);
       } else {
